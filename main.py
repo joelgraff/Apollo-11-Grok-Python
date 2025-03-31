@@ -23,7 +23,7 @@ from agc_t4rupt import AGCT4Rupt
 from agc_t3rupt import AGCT3Rupt
 from agc_phasetable import AGCPhaseTable
 from agc_imu_comp import AGCIMUComp
-from agc_rtb_opcodes import AGCRTBOpCodes
+from agc_rtb_op_codes import AGCRTBOpCodes
 from agc_sp_subroutines import AGCSPSroutines
 from agc_imu_modes import AGCIMUModes
 from agc_groundtrack import AGCGroundTrack
@@ -120,7 +120,7 @@ from agc_pinball_game_buttons_and_lights import AGCPinballGameButtonsAndLights
 from agc_alarm_and_abort import AGCAlarmAndAbort
 from agc_downlink_lists import AGCDownlinkLists
 from agc_fresh_start_subroutines import AGCFreshStartSubroutines
-from agc_inter_bank_communication import AGCInterBankCommunication
+from agc_interbank import AGCInterBank
 from agc_interpreter import AGCInterpreter
 from agc_interpretive_constants import AGCInterpretiveConstants
 from agc_single_precision_subroutines import AGCSinglePrecisionSubroutines
@@ -406,7 +406,7 @@ def main():
     print("\nRunning AGC Fresh Start Subroutines Test:")
     AGCFreshStartSubroutines().main()
     print("\nRunning AGC Inter-Bank Communication Test:")
-    AGCInterBankCommunication().main()
+    AGCInterBank().main()
     print("\nRunning AGC Interpreter Test:")
     AGCInterpreter().main()
     print("\nRunning AGC Interpretive Constants Test:")
