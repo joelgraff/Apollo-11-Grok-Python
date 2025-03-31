@@ -4,23 +4,25 @@ from agc_utils import mask_15bit, store_to_memory
 class AGCExtendedVerbs:
     def __init__(self):
         self.memory = {
-            "VERB": 0,      # Verb code
-            "DISPVAL": 0    # Value to display
+            "VERB_NUM": 0,    # Verb number
+            "VERB_ARG": 0     # Verb argument (scaled)
         }
 
-    def execute_verb(self, verb_code, value):
-        """Simulate extended verb execution (e.g., V50 = display value)."""
-        store_to_memory("VERB", mask_15bit(verb_code), self.memory)
-        if verb_code == 50:  # V50: Display value
-            store_to_memory("DISPVAL", mask_15bit(value), self.memory)
-        return self.memory["DISPVAL"]
+    def execute_verb(self, verb, arg):
+        """Simulate an extended verb execution."""
+        store_to_memory("VERB_NUM", mask_15bit(verb), self.memory)
+        store_to_memory("VERB_ARG", mask_15bit(arg), self.memory)
+        # Simplified: double the argument as an example action
+        result = mask_15bit(arg * 2)
+        store_to_memory("VERB_ARG", result, self.memory)
+        return result
 
     def main(self):
         """Sanity check for AGCExtendedVerbs."""
-        print(f"Initial: VERB={self.memory['VERB']}, DISPVAL={self.memory['DISPVAL']}")
-        result = self.execute_verb(50, 1234)
-        print(f"Verb 50: VERB={self.memory['VERB']}, DISPVAL={result}")
+        print(f"Initial: VERB_NUM={self.memory['VERB_NUM']}, VERB_ARG={self.memory['VERB_ARG']}")
+        result = self.execute_verb(40, 50)  # Verb 40, arg 50
+        print(f"Verb Executed: VERB_NUM={self.memory['VERB_NUM']}, VERB_ARG={result}")
 
 if __name__ == "__main__":
-    extended_verbs = AGCExtendedVerbs()
-    extended_verbs.main()
+    verbs = AGCExtendedVerbs()
+    verbs.main()
