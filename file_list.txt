@@ -154,7 +154,8 @@ agc_yul_system_routines.py
 batch1_test.py                                                                                                                    
 batch2_test.py                                                                                                                    
 batch3_test.py                                                                                                                    
-main.py                                                                                                                                                                                                                                                    
+main.py
+conversations.txt                                                                                                                                                                                                                                                 
 
 https://github.com/joelgraff/Apollo-11-Grok-Python/tree/main/ASM/Apollo-11-master/Comanche055/
 
