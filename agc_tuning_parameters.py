@@ -1,26 +1,15 @@
 # agc_tuning_parameters.py
-from agc_utils import mask_15bit, store_to_memory
+from agc_utils import mask_15bit, store_to_memory, AGCMemory
 
 class AGCTuningParameters:
     def __init__(self):
-        self.memory = {
-            "K_PARAM": 0,    # Tuning constant (scaled)
-            "ADJUST": 0      # Adjusted parameter value
-        }
+        self.memory = AGCMemory()
 
-    def set_tuning(self, param_value):
-        """Set a tuning parameter with scaling."""
-        store_to_memory("K_PARAM", mask_15bit(param_value), self.memory)
-        adjusted = mask_15bit(param_value * 2)  # Example scaling
-        store_to_memory("ADJUST", adjusted, self.memory)
-        return adjusted
+    def set_tuning(self, t1, t2):
+        store_to_memory("TUNE1", mask_15bit(t1), self.memory.erasable)
+        store_to_memory("TUNE2", mask_15bit(t2), self.memory.erasable)
+        print(f"Tuning Set: T1={t1}, T2={t2}")
 
     def main(self):
-        """Sanity check for AGCTuningParameters."""
-        print(f"Initial: K_PARAM={self.memory['K_PARAM']}, ADJUST={self.memory['ADJUST']}")
-        result = self.set_tuning(100)
-        print(f"Tuned: K_PARAM={self.memory['K_PARAM']}, ADJUST={result}")
-
-if __name__ == "__main__":
-    tuning_params = AGCTuningParameters()
-    tuning_params.main()
+        print("Testing Tuning Parameters")
+        self.set_tuning(10, 20)

@@ -1,27 +1,16 @@
 # agc_landing_analog_displays.py
-from agc_utils import mask_15bit, store_to_memory
+from agc_utils import mask_15bit, store_to_memory, AGCMemory, DSKYMock
 
 class AGCLandingAnalogDisplays:
     def __init__(self):
-        self.memory = {
-            "ALTRATE": 0,   # Altitude rate (m/s, scaled)
-            "DISPLAY": 0    # Analog display value
-        }
+        self.memory = AGCMemory()
+        self.dsky = DSKYMock()
 
-    def update_display(self, alt_rate):
-        """Simulate updating analog display with altitude rate."""
-        store_to_memory("ALTRATE", mask_15bit(alt_rate), self.memory)
-        # Simplified scaling for display (e.g., 1:1 mapping)
-        display_val = mask_15bit(alt_rate)
-        store_to_memory("DISPLAY", display_val, self.memory)
-        return display_val
+    def update_displays(self, alt, vel):
+        store_to_memory("ALT_DISP", mask_15bit(alt), self.memory.erasable)
+        store_to_memory("VEL_DISP", mask_15bit(vel), self.memory.erasable)
+        self.dsky.show(f"Alt: {alt}, Vel: {vel}")
 
     def main(self):
-        """Sanity check for AGCLandingAnalogDisplays."""
-        print(f"Initial: ALTRATE={self.memory['ALTRATE']}, DISPLAY={self.memory['DISPLAY']}")
-        disp = self.update_display(50)  # 50 m/s altitude rate
-        print(f"Display Update: ALTRATE={self.memory['ALTRATE']}, DISPLAY={disp}")
-
-if __name__ == "__main__":
-    landing_analog_displays = AGCLandingAnalogDisplays()
-    landing_analog_displays.main()
+        print("Testing Landing Analog Displays")
+        self.update_displays(1000, 20)

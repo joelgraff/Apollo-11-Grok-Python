@@ -1,26 +1,18 @@
 # agc_imu_compensation_package.py
-from agc_utils import mask_15bit, store_to_memory
+from agc_utils import mask_15bit, store_to_memory, AGCMemory
 
 class AGCIMUCompensationPackage:
     def __init__(self):
-        self.memory = {
-            "IMU_ERROR": 0,    # IMU error (degrees, scaled)
-            "COMP_VALUE": 0    # Compensated value (degrees, scaled)
-        }
+        self.memory = AGCMemory()
+        self.drift = 0
 
-    def compensate_imu(self, error):
-        """Simulate IMU error compensation."""
-        store_to_memory("IMU_ERROR", mask_15bit(error), self.memory)
-        comp = mask_15bit(error * 2)  # Simplified scaling
-        store_to_memory("COMP_VALUE", comp, self.memory)
+    def compensate_imu(self, drift):
+        self.drift = drift
+        comp = mask_15bit(-drift)  # Simplified compensation
+        store_to_memory("IMU_COMP", comp, self.memory.erasable)
+        print(f"IMU Compensated: {comp}")
         return comp
 
     def main(self):
-        """Sanity check for AGCIMUCompensationPackage."""
-        print(f"Initial: IMU_ERROR={self.memory['IMU_ERROR']}, COMP_VALUE={self.memory['COMP_VALUE']}")
-        comp = self.compensate_imu(5)
-        print(f"Compensated: IMU_ERROR={self.memory['IMU_ERROR']}, COMP_VALUE={comp}")
-
-if __name__ == "__main__":
-    imu_comp = AGCIMUCompensationPackage()
-    imu_comp.main()
+        print("Testing IMU Compensation")
+        self.compensate_imu(5)

@@ -1,5 +1,5 @@
 # agc_executive.py
-from agc_utils import mask_15bit, store_to_memory, PriorityQueue, AGCMemory, InterruptManager
+from agc_utils import mask_15bit, store_to_memory, PriorityQueue, AGCMemory, InterruptManager, time
 
 class AGCExecutive:
     def __init__(self):

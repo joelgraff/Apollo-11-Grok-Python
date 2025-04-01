@@ -1,26 +1,22 @@
 # agc_orbital_integration_for_lm.py
-from agc_utils import mask_15bit, store_to_memory
+from agc_utils import mask_15bit, store_to_memory, AGCMemory, time
 
 class AGCOrbitalIntegrationForLM:
     def __init__(self):
-        self.memory = {
-            "ORBIT_VEL": 0,   # Orbital velocity (m/s, scaled)
-            "ORBIT_POS": 0    # Orbital position (meters, scaled)
-        }
+        self.memory = AGCMemory()
+        self.pos = 0
+        self.vel = 0
 
-    def integrate_orbit(self, velocity):
-        """Simulate orbital integration."""
-        store_to_memory("ORBIT_VEL", mask_15bit(velocity), self.memory)
-        pos = mask_15bit(velocity * 10)  # Simplified position update
-        store_to_memory("ORBIT_POS", pos, self.memory)
-        return pos
+    def integrate_orbit(self, vel, steps=5):
+        self.vel = vel
+        for _ in range(steps):
+            self.pos += self.vel * 0.1  # Simplified integration
+            self.vel -= 1  # Simulate drag/gravity
+            store_to_memory("ORBIT_POS", mask_15bit(int(self.pos)), self.memory.erasable)
+            print(f"Orbit: Pos {self.pos}, Vel {self.vel}")
+            time.sleep(0.1)
+        return self.pos
 
     def main(self):
-        """Sanity check for AGCOrbitalIntegrationForLM."""
-        print(f"Initial: ORBIT_VEL={self.memory['ORBIT_VEL']}, ORBIT_POS={self.memory['ORBIT_POS']}")
-        pos = self.integrate_orbit(500)
-        print(f"Integrated: ORBIT_VEL={self.memory['ORBIT_VEL']}, ORBIT_POS={pos}")
-
-if __name__ == "__main__":
-    orbit_int = AGCOrbitalIntegrationForLM()
-    orbit_int.main()
+        print("Starting Orbital Integration")
+        self.integrate_orbit(500)

@@ -1,30 +1,26 @@
 # agc_descent_guidance.py
-from agc_utils import mask_15bit, store_to_memory
+import time
+from agc_utils import mask_15bit, store_to_memory, AGCMemory
 
 class AGCDescentGuidance:
     def __init__(self):
-        self.memory = {
-            "VEL": 0,       # Vertical velocity (m/s, scaled)
-            "THRUST": 0,    # Thrust command (N)
-            "MASSC": 5000   # Mass (kg)
-        }
+        self.memory = AGCMemory()
+        self.alt = 0
+        self.vel = 0
 
-    def descent_adjust(self, velocity, thrust):
-        """Simulate descent guidance: Adjust velocity with thrust."""
-        store_to_memory("VEL", mask_15bit(velocity), self.memory)
-        store_to_memory("THRUST", mask_15bit(thrust), self.memory)
-        # Simplified: dv = (thrust / mass) * dt (dt=1s)
-        dv = thrust // self.memory["MASSC"]
-        new_vel = mask_15bit(velocity - dv)
-        store_to_memory("VEL", new_vel, self.memory)
-        return new_vel
+    def guide_descent(self, alt, vel, throttle):
+        self.alt = alt
+        self.vel = vel
+        while self.alt > 0 and self.vel > 0:
+            self.alt -= max(1, self.vel * throttle // 100)  # Altitude drop based on throttle
+            self.vel -= throttle // 10  # Faster velocity reduction
+            if self.alt < 0: self.alt = 0
+            store_to_memory("DESC_ALT", mask_15bit(self.alt), self.memory.erasable)
+            store_to_memory("DESC_VEL", mask_15bit(self.vel), self.memory.erasable)
+            print(f"Descent: Alt {self.alt}, Vel {self.vel}")
+            time.sleep(0.1)
+        print("Descent Complete")
 
     def main(self):
-        """Sanity check for AGCDescentGuidance."""
-        print(f"Initial: VEL={self.memory['VEL']}, THRUST={self.memory['THRUST']}, MASSC={self.memory['MASSC']}")
-        vel = self.descent_adjust(100, 1000)  # 100 m/s, 1000N thrust
-        print(f"Descent: VEL={vel}, THRUST={self.memory['THRUST']}")
-
-if __name__ == "__main__":
-    descent_guidance = AGCDescentGuidance()
-    descent_guidance.main()
+        print("Starting Descent Guidance")
+        self.guide_descent(3000, 30, 50)

@@ -1,28 +1,21 @@
 # agc_p12.py
-from agc_utils import mask_15bit, store_to_memory
+import time
+from agc_utils import mask_15bit, store_to_memory, AGCMemory
 
 class AGCP12:
     def __init__(self):
-        self.memory = {
-            "ALT": 0,       # Altitude (meters, scaled)
-            "THRUST": 0,    # Thrust command (N)
-            "MASSC": 5000   # Mass (kg)
-        }
+        self.memory = AGCMemory()
+        self.alt = 0
 
-    def ascent_guidance(self, altitude):
-        """Simulate P12 ascent guidance: Set thrust based on altitude."""
-        store_to_memory("ALT", mask_15bit(altitude), self.memory)
-        # Simplified: thrust increases with altitude (arbitrary scaling)
-        thrust = mask_15bit(1000 + (altitude // 10))
-        store_to_memory("THRUST", thrust, self.memory)
-        return thrust
+    def ascent_guidance(self, alt, vel):
+        self.alt = alt
+        while self.alt < 10000:  # Simulate ascent to orbit
+            self.alt += vel
+            store_to_memory("P12_ALT", mask_15bit(self.alt), self.memory.erasable)
+            print(f"Ascent: Alt {self.alt}")
+            time.sleep(0.1)
+        print("Ascent to Orbit Complete")
 
     def main(self):
-        """Sanity check for AGCP12."""
-        print(f"Initial: ALT={self.memory['ALT']}, THRUST={self.memory['THRUST']}, MASSC={self.memory['MASSC']}")
-        thrust = self.ascent_guidance(500)  # 500m altitude
-        print(f"Ascent: ALT={self.memory['ALT']}, THRUST={thrust}")
-
-if __name__ == "__main__":
-    p12 = AGCP12()
-    p12.main()
+        print("Starting P12 Ascent")
+        self.ascent_guidance(0, 1000)
