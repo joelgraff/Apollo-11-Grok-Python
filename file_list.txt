@@ -1,9 +1,5 @@
+
 https://raw.githubusercontent.com/joelgraff/Apollo-11-Grok-Python/refs/heads/main
-https://github.com/joelgraff/Apollo-11-Grok-Python/blob/main/ASM/Apollo-11-master/Luminary099/
-https://github.com/joelgraff/Apollo-11-Grok-Python/tree/main/ASM/Apollo-11-master/Comanche055/
-
-
-PYTHON
 
 agc_abort_guidance_system.py                                                                                                      
 agc_alarm_abort.py                                                                                                                
@@ -160,7 +156,7 @@ batch2_test.py
 batch3_test.py                                                                                                                    
 main.py                                                                                                                                                                                                                                                    
 
-Comanche055
+https://github.com/joelgraff/Apollo-11-Grok-Python/tree/main/ASM/Apollo-11-master/Comanche055/
 
 AGC_BLOCK_TWO_SELF-CHECK.agc                                                                                                      
 ALARM_AND_ABORT.agc                                                                                                               
@@ -250,7 +246,7 @@ TVCSTROKETEST.agc
 UPDATE_PROGRAM.agc                                                                                                                
 WAITLIST.agc      
 
-Luminary099
+https://github.com/joelgraff/Apollo-11-Grok-Python/blob/main/ASM/Apollo-11-master/Luminary099/
 
 AGC_BLOCK_TWO_SELF_CHECK.agc                                                                                                      
 AGS_INITIALIZATION.agc                                                                                                            
